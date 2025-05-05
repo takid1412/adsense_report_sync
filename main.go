@@ -35,16 +35,20 @@ func main() {
 
 }
 
-func start() {
+func loadEnv() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		panic("Error loading .env file")
 	}
+}
+
+func start() {
+	loadEnv()
 	c := cron.New()
 
 	cronTime := "0 3 * * *"
 
-	_, err = c.AddFunc(cronTime, func() {
+	_, err := c.AddFunc(cronTime, func() {
 		log.Printf("Running cron at %s", time.Now().Format("2006-01-02 15:04:05"))
 		runTask()
 	})
@@ -58,7 +62,7 @@ func start() {
 }
 
 func pm2() {
-
+	loadEnv()
 	obj := map[string]interface{}{
 		"apps": []interface{}{
 			map[string]interface{}{
