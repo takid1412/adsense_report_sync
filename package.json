@@ -1,6 +1,7 @@
 {
   "scripts": {
     "pm2": "go run main.go -task=pm2",
+    "test": "go run main.go -task=test",
     "build": "go build",
     "start": "npm run build && ./adsense_report_sync -task=start"
   }

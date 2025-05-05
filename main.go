@@ -24,13 +24,17 @@ func main() {
 	task := flag.String("task", "", "task name")
 	flag.Parse()
 
+	loadEnv()
+
 	switch *task {
 	case "start":
 		start()
 	case "pm2":
 		pm2()
+	case "test":
+		runTask()
 	default:
-		log.Fatalf("task not support: %s. Available: start, pm2", *task)
+		log.Fatalf("task not support: %s. Available: start, pm2, test", *task)
 	}
 
 }
@@ -43,7 +47,6 @@ func loadEnv() {
 }
 
 func start() {
-	loadEnv()
 	c := cron.New()
 
 	cronTime := "0 3 * * *"
@@ -62,7 +65,6 @@ func start() {
 }
 
 func pm2() {
-	loadEnv()
 	obj := map[string]interface{}{
 		"apps": []interface{}{
 			map[string]interface{}{
@@ -135,7 +137,8 @@ func runTask() {
 		date := row.Cells[1].Value
 		earnings := row.Cells[2].Value
 
-		str, _ := json.Marshal(map[string]string{
+		str, _ := json.Marshal(map[string]interface{}{
+			"timestamp":  time.Now().Unix(),
 			"channel_id": channelID,
 			"date":       date,
 			"earnings":   earnings,
